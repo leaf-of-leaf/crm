@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>登录</title>
-<link href="css/style.css" rel='stylesheet' type='text/css' />
+<link href="../static/css/style.css" th:href="@{css/style.css}" rel='stylesheet' type='text/css' />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords"
@@ -12,7 +12,36 @@
 	rel='stylesheet' type='text/css'>
 <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
 <script>
-	
+	$(function () {
+		//当body中有回车按钮按下的时候，触发提交时间
+		$("body").keydown(function(even) {
+			if(even.keyCode == 13){
+				//keyCode如果为13则表示用户按了回车
+				$(".submit").click();
+			}
+		});
+		//点击登录按钮的提交事件。
+		$(".submit").on("click", function() {
+			var name1 = $("input[type=text]").val();
+			var password1 = $("input[type=password]").val();
+			if(!!!name1){
+				//用户名不能为空
+				alert("用户名不能为空");
+			}else if(!!!password1){
+				//密码不能为空
+				alert("密码不能为空");
+			}else{
+				//从后台获取登录之后的状态信息,控制前台页面跳转。
+				$.post("user/login",{name:name1,password:password1},function (data) {
+					if(data == "success"){
+						window.location.href = "index";
+					}else{
+						alert(data);
+					}
+				})
+			}
+		});
+	});
 </script>
 
 </head>
@@ -26,18 +55,16 @@
 			<div class="sub-head"></div>
 			<form>
 				<input type="text" class="text" name="name" placeholder="请输入用户名">
+				<!--autocomplete="off"表示不自动提示之前输入框输入的内容-->
 				<input type="password" name="password" placeholder="请输入密码" autocomplete="off">
 				<div class="p-container">
 					<div class="clear"></div>
 				</div>
 				<div class="submit">
-					<a href="index.html"><input type="button" value="登录"></a>
+					<input type="button" value="登录">
 				</div>
-
 			</form>
-
 		</div>
-
 		<div class="clear"></div>
 	</div>
 

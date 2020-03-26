@@ -1,11 +1,19 @@
 package com.briup.crm.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -14,6 +22,9 @@ public class User implements Serializable {
 
     private Integer flag;
 
+    @JoinColumn(name = "role_id")
+    @ManyToOne
+    @JsonIgnore //将来返回给前台时忽略当前属性
     private Role role;
 
     public User() {
