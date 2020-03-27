@@ -2,6 +2,11 @@ package com.briup.crm.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.WebRequest;
+
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @author kj
@@ -18,7 +23,12 @@ public class ViewController {
     }
 
     @RequestMapping("/index")
-    public String toIndexPage(){
+    public String toIndexPage(HttpSession session){
+
+        Object user = session.getAttribute("user");
+        if(user == null){
+            return "login";
+        }
         return "index";
     }
 }

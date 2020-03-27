@@ -35,8 +35,6 @@
 				$.post("user/login",{name:name1,password:password1},function (data) {
 					if(data == "success"){
 						window.location.href = "index";
-					}else{
-						alert(data);
 					}
 				})
 			}

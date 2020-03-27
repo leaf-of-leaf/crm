@@ -8,14 +8,18 @@
 
   <link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../static/layui/css/layui.css">
   <!-- <link rel="stylesheet" href="css/bootstrap-3.3.7/css/bootstrap.min.css"> -->
-  <link rel="stylesheet" href="css/bootstrapSwitch/css/bootstrap3/bootstrap-switch.min.css">
-   <script src="js/jquery-3.3.1.min.js"></script>
-   <link rel="stylesheet" href="css/bootstrap-3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/bootstrapSwitch/css/bootstrap3/bootstrap-switch.min.css"
+    th:href="@{/css/bootstrapSwitch/css/bootstrap3/bootstrap-switch.min.css}">
+<!--   <script src="../static/js/jquery-3.3.1.min.js" th:href="@{/js/jquery-3.3.1.min.js}"></script>-->
+   <link rel="stylesheet" href="../static/css/bootstrap-3.3.7/css/bootstrap.min.css"
+    th:href="@{/css/bootstrap-3.3.7/css/bootstrap.min.css}">
   <!-- <script src="css/bootstrapSwitch/css/bootstrap-switch.min.js"></script> -->
-   <script src="css/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-  <script src="css/bootstrapSwitch/js/bootstrap-switch.min.js"></script>
-  <script src="js/router.js"></script>
-  <style src="css/index.css"></style>
+   <script src="../static/css/bootstrap-3.3.7/js/bootstrap.min.js"
+    th:href="@{/css/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+  <script src="../static/css/bootstrapSwitch/js/bootstrap-switch.min.js"
+        th:href="@{/css/bootstrapSwitch/js/bootstrap-switch.min.js}"></script>
+  <script src="../static/js/router.js" th:href="@{/js/router.js}"></script>
+  <style src="../static/css/index.css" th:href="@{/css/index.css}"></style>
   <style type="text/css">
     #inner p:first-child{
     margin-left: 300px;
@@ -59,6 +63,7 @@
 }
 
   </style>
+    <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -84,21 +89,21 @@
       <li class="layui-nav-item">
         <a href="javascript:;">
           <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-          贤心
+          <span th:text="${session.user.name}">贤心</span>
         </a>
         <dl class="layui-nav-child">
           <dd><a href="">基本资料</a></dd>
           <dd><a href="">安全设置</a></dd>
         </dl>
       </li>
-      <li class="layui-nav-item"><a href="login.html">退了</a></li>
+      <li class="layui-nav-item"><a href="loginout">退了</a></li>
     </ul>
   </div>
   
   <div class="layui-side layui-bg-black">
     <div class="layui-side-scroll">
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">//
         <li class="layui-nav-item layui-nav-itemed">
           <a href="javascript:;">营销管理</a>
           <dl class="layui-nav-child">
@@ -152,12 +157,45 @@
   Copyright 2011-2018 杰普软件科技有限公司 ICP 05024518 | 营业执照 
   </div>
 </div>
-<script src="./layui/layui.js"></script>
+<div id="role" th:text="${session.user.role.id}" style="display: none"></div>
+<script type="text/javascript">
+    $(function () {
+        $(".layui-nav-item:gt(1)").hide();
+        $(".layui-nav-item:gt(1) dd").hide();
+        var role_id = $("#role").html();
+        switch (role_id) {
+            case "1":
+                $(".layui-nav-item:last").show();
+                $(".layui-nav-item:last dd").show();
+                break;
+            case "2":
+                $(".layui-nav-item:eq(5)").show();
+                $(".layui-nav-item:eq(5) dd").show();
+                break;
+            case "3":
+                $(".layui-nav-item:eq(2)").show();
+                $(".layui-nav-item:eq(2) dd:first").show();
+                $(".layui-nav-item:eq(4)").show();
+                $(".layui-nav-item:eq(4) dd:first").show();
+                break;
+            case "4":
+                $(".layui-nav-item:eq(2)").show();
+                $(".layui-nav-item:eq(2) dd:last").show();
+                $(".layui-nav-item:eq(3)").show();
+                $(".layui-nav-item:eq(3) dd").show();
+                $(".layui-nav-item:eq(4)").show();
+                $(".layui-nav-item:eq(4) dd:last").show();
+                break;
+            default:
+                break;
+        }
+    })
+</script>
+<script src="../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script>
 //JavaScript代码区域
 layui.use('element', function(){
   var element = layui.element;
-  
 });
 </script>
 </body>
