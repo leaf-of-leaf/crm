@@ -32,7 +32,7 @@
 				alert("密码不能为空");
 			}else{
 				//从后台获取登录之后的状态信息,控制前台页面跳转。
-				$.post("user/login",{name:name1,password:password1},function (data) {
+				$.post("/user/login",{name:name1,password:password1},function (data) {
 					if(data == "success"){
 						window.location.href = "index";
 					}

@@ -1,4 +1,5 @@
 <!-- 用户 -->
+<html xmlns:th="http://www.thymeleaf.org">
 <div id="user">
   <div>
   <form class="form-inline">
@@ -30,40 +31,19 @@
 		    </tr> 
 		  </thead>
 
-		  <tbody>
-		    <tr>
-		      <td>1</td>
-		      <td>李四</td>
-		      <td>高管</td>
-		      <td>进行中</td>
-		      <td>
-		      	<i  class="layui-icon layui-icon-edit editUser"></i>  
-		      	<i  class="layui-icon layui-icon-delete deleteUser"></i>   
-		      </td>
-		    </tr> 
-		    <tr>
-		    
-		      <td>2</td>
-		      <td>李四</td>
-		      <td>高管</td>
-		      <td>进行中</td>
-		      <td>
-		      	<i  class="layui-icon layui-icon-edit editUser"></i>  
-		      	<i  class="layui-icon layui-icon-delete deleteUser"></i>   
-		      </td>
-		    </tr>  
-		    <tr>
-		      
-		      <td>3</td>
-		      <td>李四</td>
-		      <td>高管</td>
-		      <td>进行中</td>
-		      <td>
-		      	<i  class="layui-icon layui-icon-edit editUser"></i>  
-		      	<i  class="layui-icon layui-icon-delete deleteUser"></i>   
-		      </td>
-		    </tr>     
-         </tbody>
+		<tbody th:each="u:${session.users}">
+		<tr>
+			<td th:text="${u.id}">1</td>
+			<td th:text="${u.name}">经理</td>
+			<td th:text="${u.role.name}" name="role">这是一个经理用户,啦啦啦啦</td>
+			<td th:if="${u.flag eq 1}">正常</td>
+			<td th:if="!${u.flag eq 1}">注销</td>
+			<td>
+				<i  class="layui-icon layui-icon-edit editUser"></i>
+				<i  class="layui-icon layui-icon-delete deleteUser"></i>
+			</td>
+		</tr>
+		</tbody>
     </table>
 </div>
 <div class="fenye">
@@ -110,34 +90,34 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label>用户名:</label>
-							<input type="text" name="msName" class="form-control">
+							<input type="text" name="name" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>密码:</label>
-							<input type="password" name="msName" class="form-control">
+							<input type="password" name="password" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>角色:</label>
-							<select name="flmName" id="" class="form-control">
+							<select id="role_id" class="form-control">
 						            <option value="">请选择用户角色类型</option>
-							        <option value="0">管理员</option>
-							        <option value="1">高管</option>
-							        <option value="1">部门主管</option>
-							        <option value="2">客户经理</option>					   
+							        <option value="1">管理员</option>
+							        <option value="2">高管</option>
+							        <option value="3">部门主管</option>
+							        <option value="4">客户经理</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label>状态:</label>
-							<select name="flmName" id="" class="form-control">
-						        <option value="0">正常</option>
-						        <option value="1">注销</option>						   
+							<select name="flag" id="" class="form-control">
+						        <option value="1">正常</option>
+						        <option value="2">注销</option>
 							</select>
 						</div>
 					</div>
 				</form>
 				<div class="modal-footer">
 				    <button class="btn" style="background:#ccc">取消</button>
-					<button class="btn" style="background:#ccc">保存</button>
+					<button class="btn btn_saveuser" style="background:#ccc">保存</button>
 				</div>
     </div>
   </div>
@@ -182,21 +162,33 @@
 </style>
 <script type="text/javascript">
 	$(function(){
+		var id;
 		// 显示删除模态框
 		$('.deleteUser').click(function(){
 			$('#deleteModal').show();
+			id = $(this).parent().parent().children().first().text().trim();
 		})
 		// 关闭删除模态框
 		$('.close').click(function(){
 			$('#deleteModal').hide();
+			id = ""
 		})
 		// 关闭删除模态框
 		$('.btn-default').click(function(){
 			$('#deleteModal').hide();
+			id = ""
 		})
 		// 确定删除
 		$('.btn-primary').click(function(){
 			$('#deleteModal').hide();
+			$.get("deleteUser", {user_id: id}, function (data) {
+				if(data == "success"){
+					$("#user").load("toUser");
+				}else{
+					alert(data);
+				}
+			})
+			id = "";
 		})
 		// 点击新增显示模态框
 		$('#add').click(function(){
@@ -208,16 +200,44 @@
 				$('#toAdd').hide();
 		})
 		// 新增模态框保存
-		$('button:contains(保存)').on('click',function(){
-				$('#toAdd').hide();
-		})	
+		$('.btn_saveuser').on('click',function(){
+			$("#toAdd").hide();
+			var userName = $("input[name='name']").val();
+
+			var password = $("input[name='password']").val();
+			var flag = $("select[name='flag'] option:selected").val();
+			var role_id = $("#role_id option:selected").val();
+			if(name=""||password==""||flag==""||role_id==""){
+				alert("提交失败，不能为空")
+				return;
+			}
+			$.post("saveUser", {id: id, "name": userName,password: password,flag: flag,"role.id":role_id}, function (data) {
+				if(data == "success"){
+					$('#user').load('toUser');
+					//重新点击选择事件
+					// $("").trigger("click");
+				}else{
+					alert(data);
+				}
+			})
+			id = "";
+		})
 		// 点击编辑显示模态框
 		$('.editUser').click(function(){
 			$('#toAdd').show();
+			id = $(this).parent().parent().children().first().text().trim();
+			var value = $(this).parent().siblings("[name=role]").text().trim();
+			$("#role_id option").each(function() {
+				if($(this).text() == value){
+					$(this).prop("selected", "selected");
+					return false;
+				}
+			})
 		})
 		// 查询
 		$('.search').click(function(){
-			alert('查询')
+			alert('查询');
 		})
 	})
 </script>
+</html>

@@ -1,16 +1,15 @@
 $(function(){
-
   $('.layui-nav-child').on({
     click:function(){
-      if($(this).text()=="商机开发计划"){
+      if($(this).text().trim()=="商机开发计划"){
         $('.layui-body').load('pages/plan.html');
        
       }
-       if($(this).text()=="销售商机管理"){
+       if($(this).text().trim()=="销售商机管理"){
         $('.layui-body').load('pages/sales.html');
         
       }
-       if($(this).text()=="客户信息查询"){
+       if($(this).text().trim()=="客户信息查询"){
         $('.layui-body').load('pages/customer.html');
         
       }
@@ -18,28 +17,28 @@ $(function(){
       //   $('.layui-body').load('./pages/customer_add.html');
        
       // }
-      if($(this).text()=="服务反馈"){
+      if($(this).text().trim()=="服务反馈"){
         $('.layui-body').load('pages/feedback.html');
         
       }
-      if($(this).text()=="服务处理"){
+      if($(this).text().trim()=="服务处理"){
         $('.layui-body').load('pages/service.html');
        
       }
-      if($(this).text()=="客户贡献分析"){
+      if($(this).text().trim()=="客户贡献分析"){
         $('.layui-body').load('pages/customerContribution.html');
        
       }
-       if($(this).text()=="客户构成分析"){
+       if($(this).text().trim()=="客户构成分析"){
         $('.layui-body').load('pages/customerConstitute.html');
         
       }
-       if($(this).text()=="角色管理"){
-        $('.layui-body').load('pages/role.html');
+       if($(this).text().trim()=="角色管理"){
+        $('.layui-body').load('/toRole');
         
       }
-       if($(this).text()=="用户管理"){
-        $('.layui-body').load('pages/user.html');
+       if($(this).text().trim()=="用户管理"){
+        $('.layui-body').load('/toUser');
        
       }
       

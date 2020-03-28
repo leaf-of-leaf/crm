@@ -24,11 +24,6 @@ public class ViewController {
 
     @RequestMapping("/index")
     public String toIndexPage(HttpSession session){
-
-        Object user = session.getAttribute("user");
-        if(user == null){
-            return "login";
-        }
         return "index";
     }
 }
