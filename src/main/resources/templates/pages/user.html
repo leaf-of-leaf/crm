@@ -4,12 +4,19 @@
   <div>
   <form class="form-inline">
   <div class="form-group">
-	<select name="city" id="" class="form-control">
+	<select name="city" id="searchRoleId" class="form-control">
 		 <option value="">请选择用户角色类型</option>
-        <option value="0">管理员</option>
-        <option value="1">高管</option>
-        <option value="1">部门主管</option>
-        <option value="2">客户经理</option>
+        <option value="1" th:if="${roleId eq '1'}" selected="selected">管理员</option>
+		<option value="1" th:if="${roleId ne '1'}">管理员</option>
+		<option value="2" th:if="${roleId eq '2'}" selected="selected">高管</option>
+		<option value="2" th:if="${roleId ne '2'}">高管</option>
+		<option value="3" th:if="${roleId eq '3'}" selected="selected">部门主管</option>
+		<option value="3" th:if="${roleId ne '3'}">部门主管</option>
+		<option value="4" th:if="${roleId eq '4'}" selected="selected">客户经理</option>
+		<option value="4" th:if="${roleId ne '4'}">客户经理</option>
+<!--        <option value="2">高管</option>-->
+<!--        <option value="3">部门主管</option>-->
+<!--        <option value="4">客户经理</option>-->
 	</select>
   </div>
   <input class="btn btn-default search" type="button" value="查询">
@@ -49,21 +56,26 @@
 <div class="fenye">
 	<nav aria-label="Page navigation">
 	  <ul class="pagination">
-	    <li>
-	      <a href="#" aria-label="Previous">
-	        <span aria-hidden="true">上一页</span>
-	      </a>
-	    </li>
-	    <li class="active"><a href="#">1</a></li>
-	    <li><a href="#">2</a></li>
-	    <li><a href="#">3</a></li>
-	    <li><a href="#">4</a></li>
-	    <li><a href="#">5</a></li>
-	    <li>
-	      <a href="#" aria-label="Next">
-	        <span aria-hidden="true">下一页</span>
-	      </a>
-	    </li>
+		  <li>
+			  <a href="javascript:;" th:if="${pageNum eq 1}" aria-label="Previous" style="pointer-events: none; opacity: 0.2" >
+				  <span aria-hidden="true">上一页</span>
+			  </a>
+			  <a href="javascript:;" th:if="${pageNum ne 1}" aria-label="Previous">
+				  <span aria-hidden="true">上一页</span>
+			  </a>
+		  </li>
+		  <th:block th:each="page:${#numbers.sequence(1, usersNum)}">
+			  <li th:if="${pageStat.count eq pageNum}" class="active"><a th:text="${pageStat.count}" href="javascript:;" class="pages"></a></li>
+			  <li th:if="${pageStat.count ne pageNum}"><a th:text="${pageStat.count}" href="javascript:;" class="pages"></a></li>
+		  </th:block>
+		  <li>
+			  <a href="javascript:;" th:if="${pageNum eq usersNum}" aria-label="Next" style="pointer-events: none; opacity: 0.2">
+				  <span aria-hidden="true">下一页</span>
+			  </a>
+			  <a href="javascript:;" th:if="${pageNum ne usersNum}" aria-label="Next">
+				  <span aria-hidden="true">下一页</span>
+			  </a>
+		  </li>
 	  </ul>
 	</nav>
 </div>
@@ -90,7 +102,7 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label>用户名:</label>
-							<input type="text" name="name" class="form-control">
+							<input type="text" name="user_name" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>密码:</label>
@@ -202,12 +214,11 @@
 		// 新增模态框保存
 		$('.btn_saveuser').on('click',function(){
 			$("#toAdd").hide();
-			var userName = $("input[name='name']").val();
-
+			var userName = $("input[name='user_name']").val();
 			var password = $("input[name='password']").val();
 			var flag = $("select[name='flag'] option:selected").val();
 			var role_id = $("#role_id option:selected").val();
-			if(name=""||password==""||flag==""||role_id==""){
+			if(userName==""||password==""||flag==""||role_id==""){
 				alert("提交失败，不能为空")
 				return;
 			}
@@ -236,7 +247,41 @@
 		})
 		// 查询
 		$('.search').click(function(){
-			alert('查询');
+			var roleId = $("#searchRoleId option:selected").val();
+			if(!!roleId){
+				$("#user").load("/toUser/byRole/" + roleId + "/1");
+			}else{
+				$("#user").load("/toUser/1");
+			}
+		})
+
+		//分页
+		$(".pages").on("click", function () {
+			var page = $(this).text();
+			var roleId = $("#searchRoleId option:selected").val();
+			if(!!roleId){
+				$("#user").load("/toUser/byRole/" + roleId + "/" + page);
+			}else{
+				$("#user").load("/toUser/" + page);
+			}
+		})
+		$("a[aria-label=Next]").click(function () {
+			var nextPage = parseInt($("li[class=active]:first a").text()) + 1;
+			var roleId = $("#searchRoleId option:selected").val();
+			if(!!roleId){
+				$("#user").load("/toUser/byRole/" + roleId + "/" + nextPage);
+			}else{
+				$("#user").load("/toUser/" + nextPage);
+			}
+		});
+		$("a[aria-label=Previous]").click(function () {
+			var previousPage = parseInt($("li[class=active]:first a").text()) - 1;
+			var roleId = $("#searchRoleId option:selected").val();
+			if(!!roleId){
+				$("#user").load("/toUser/byRole/" + roleId + "/" + previousPage);
+			}else{
+				$("#user").load("/toUser/" + previousPage);
+			}
 		})
 	})
 </script>

@@ -2,12 +2,10 @@ package com.briup.crm.service.impl;
 
 import com.briup.crm.bean.Role;
 import com.briup.crm.dao.RoleDao;
-import com.briup.crm.dao.UserDao;
 import com.briup.crm.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

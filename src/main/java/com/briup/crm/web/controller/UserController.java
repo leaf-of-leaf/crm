@@ -1,5 +1,6 @@
 package com.briup.crm.web.controller;
 
+import com.briup.crm.bean.Role;
 import com.briup.crm.bean.User;
 import com.briup.crm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,6 @@ public class UserController {
             page = 1;
         }
         Page<User> allUsers = service.findAllUsers(page - 1);
-        System.out.println(allUsers.getContent());
         session.setAttribute("users", allUsers.getContent());
         map.put("pageNum", page);
         map.put("usersNum", service.getUserNum());
@@ -80,8 +80,19 @@ public class UserController {
     @PostMapping("/saveUser")
     @ResponseBody
     public String saveUser(User user){
-        System.out.println("user debug:" + user);
         service.saveUser(user);
         return "success";
+    }
+
+    @GetMapping(value = "toUser/byRole/{roleId}/{page}")
+    public String toUserByRole(HttpSession session, Map<String, Object> map
+            , @PathVariable("page") String pageStr, @PathVariable("roleId") String roleIdStr){
+        //通过Role查询User并且附带分页功能
+        Page<User> allUsers = service.findAllUsersByRole(pageStr,roleIdStr);
+        session.setAttribute("users", allUsers.getContent());
+        map.put("pageNum", Integer.valueOf(pageStr));
+        map.put("usersNum", service.getUserNumByRoleId(roleIdStr));
+        map.put("roleId", roleIdStr);
+        return "pages/user";
     }
 }

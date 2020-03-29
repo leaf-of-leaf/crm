@@ -25,7 +25,6 @@ public class RoleController {
     @GetMapping(value = "toRole/{page}")
     public String toRoleByPage(HttpSession session, Map<String, Object> map, @PathVariable("page") String pageStr){
         //将数据库中所有角色信息查询出来。保存到session中
-        System.out.println("toRole");
         Integer page = null;
         try{
             page = Integer.valueOf(pageStr);
@@ -33,7 +32,6 @@ public class RoleController {
             page = 1;
         }
         Page<Role> allRoles = service.findAllRoles(page-1);
-        System.out.println(allRoles.getContent());
         session.setAttribute("roles", allRoles.getContent());
         map.put("pageNum", page);
         map.put("rolesNum", service.getRoleNumber());

@@ -1,7 +1,6 @@
 package com.briup.crm.service.impl;
 
 import com.briup.crm.bean.User;
-import com.briup.crm.dao.RoleDao;
 import com.briup.crm.dao.UserDao;
 import com.briup.crm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +46,27 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void saveUser(User user) {
         userDao.save(user);
+    }
+
+    @Override
+    public Page<User> findAllUsersByRole(String pageStr, String roleIdStr) {
+        return userDao.findUsersByRoleId(PageRequest.of(parseInt(pageStr) - 1,5),
+                parseInt(roleIdStr));
+    }
+
+    @Override
+    public int getUserNumByRoleId(String roleIdStr) {
+        int count = (int) userDao.countUsersByRoleId(parseInt(roleIdStr));
+        return count % 5 == 0? count / 5 : count / 5 + 1;
+    }
+
+    public Integer parseInt(String IntStr){
+        Integer result = null;
+        try{
+            result = Integer.valueOf(IntStr);
+        } catch (NumberFormatException e){
+            result = 1;
+        }
+        return result;
     }
 }

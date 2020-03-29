@@ -92,19 +92,19 @@
 <div class="modal"  id="toAdd">
   <div class="modal-dialog" style="height:400px;overflow:auto;">
     <div class="modal-content">
-       <form id="add-form" method="post" action="addRole">
+       <form id="add-form">
 					<div class="modal-body">
 						<div class="form-group">
-							<label>角色名:</label>
-							<input type="text" name="name" class="form-control">
+							<label>用户名:</label>
+							<input type="text" name="role_name" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>描述:</label>
-							<input type="text" name="description" class="form-control">
+							<input type="text" id="description" name="description" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label>状态:</label>
-							<select name="flag" id="" class="form-control">
+							<select name="flag" class="form-control">
 						        <option value="1">正常</option>
 						        <option value="2">注销</option>
 							</select>
@@ -200,15 +200,15 @@
 		})
 		// 新增模态框保存
 		$('.btn_saverole').on('click',function(){
-			$("#toAdd").hide();
-			var name = $("input[name='name']").val();
-			var description = $("input[name='description']").val();
+			var description = $("#description").val();
 			var flag = $("select[name='flag'] option:selected").val();
-			if(name=""||description==""||flag==""){
-				alert("提交失败，不能为空")
+			var name = $("input[name='role_name']").val();
+			$("#toAdd").hide();
+			if(name==""||description==""||flag==""){
+				alert("提交失败，不能为空");
 				return;
 			}
-			$.post("saveRole", {id: id, name: name,description: description,flag: flag}, function (data) {
+			$.post("saveRole", {id: id, "name": name,description: description,flag: flag}, function (data) {
 				if(data == "success"){
 					$('#role').load('toRole');
 					//重新点击选择事件
@@ -224,6 +224,7 @@
 			$('#toAdd').show();
 			id = $(this).parent().parent().children().first().text().trim();
 		})
+		//分页
 		$(".pages").on("click", function () {
 			var page = $(this).text();
 			$("#role").load("/toRole/" + page);
@@ -232,12 +233,10 @@
 			var nextPage = parseInt($("li[class=active]:first a").text()) + 1;
 			$("#role").load("/toRole/" + nextPage);
 		});
-		
 		$("a[aria-label=Previous]").click(function () {
 			var previousPage = parseInt($("li[class=active]:first a").text()) - 1;
 			$("#role").load("/toRole/" + previousPage);
 		})
-
 	})
 </script>
 </html>
