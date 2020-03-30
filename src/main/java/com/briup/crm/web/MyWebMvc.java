@@ -17,7 +17,7 @@ public class MyWebMvc implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginFilter())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login","pages/login.html", "/login", "/css/**", "/images/**", "/js/**", "layui/**");
+                .excludePathPatterns("/user/login","pages/login.html", "/css/**", "/images/**", "/js/**", "layui/**");
     }
 
     @Override

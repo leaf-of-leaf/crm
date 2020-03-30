@@ -32,9 +32,10 @@ public class RoleController {
             page = 1;
         }
         Page<Role> allRoles = service.findAllRoles(page-1);
-        session.setAttribute("roles", allRoles.getContent());
+        session.setAttribute("roles", allRoles);
         map.put("pageNum", page);
         map.put("rolesNum", service.getRoleNumber());
+//        map.put("rolesNum", allRoles.getTotalPages());
         return "pages/role";
     }
 
