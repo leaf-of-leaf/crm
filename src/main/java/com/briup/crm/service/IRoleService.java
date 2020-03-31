@@ -3,6 +3,7 @@ package com.briup.crm.service;
 import com.briup.crm.bean.Role;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IRoleService {
@@ -16,12 +17,14 @@ public interface IRoleService {
     void saveRole(Role role);
 
     //通过id找到对应的的Role
-    Optional<Role> findRoleById(Integer id);
+    Role findRoleById(Integer id);
 
     //删除
     void deleteRole(Integer id);
 
     //总共的角色数
     Integer getRoleNumber();
+
+    List<Role> findAll();
 
 }

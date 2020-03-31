@@ -40,8 +40,8 @@
 		      <td th:if="${role.flag eq 1}">正常</td>
 		      <td th:if="!${role.flag eq 1}">注销</td>
 		      <td>
-		      	<i  class="layui-icon layui-icon-edit editUser"></i>
-		      	<i  class="layui-icon layui-icon-delete deleteUser"></i>
+		      	<i th:attr="roleId=${role.id}" class="layui-icon layui-icon-edit editUser"></i>
+		      	<i th:attr="roleId=${role.id}" class="layui-icon layui-icon-delete deleteUser"></i>
 		      </td>
 		    </tr> 
          </tbody>
@@ -51,25 +51,26 @@
 	<nav aria-label="Page navigation">
 	  <ul class="pagination">
 	    <li>
-	      <a href="javascript:;" th:if="${pageNum eq 1}" aria-label="Previous" style="pointer-events: none; opacity: 0.2" >
+	      <a href="javascript:;" th:style="${session.roles.hasPrevious()?'':'pointer-events: none; opacity: 0.2'}" aria-label="Previous"
+		  th:onclick="|selectPage(${session.roles.getNumber()})|">
 	        <span aria-hidden="true">上一页</span>
 	      </a>
-			<a href="javascript:;" th:if="${pageNum ne 1}" aria-label="Previous">
-				<span aria-hidden="true">上一页</span>
-			</a>
 	    </li>
-		  <th:block th:each="page:${#numbers.sequence(1, rolesNum)}">
-				<li th:if="${pageStat.count eq pageNum}" class="active"><a th:text="${pageStat.count}" href="javascript:;" class="pages"></a></li>
-			    <li th:if="${pageStat.count ne pageNum}"><a th:text="${pageStat.count}" href="javascript:;" class="pages"></a></li>
+		  <th:block th:each="page:${#numbers.sequence(1, session.roles.getTotalPages())}">
+			    <li th:class="${pageStat.count eq session.roles.getNumber() + 1 ? 'active':''}"><a th:onclick="|selectPage(${pageStat.count})|" th:text="${pageStat.count}" href="javascript:;" class="pages"></a></li>
 		  </th:block>
 	    <li>
-	      <a href="javascript:;" th:if="${pageNum eq rolesNum}" aria-label="Next" style="pointer-events: none; opacity: 0.2">
+	      <a href="javascript:;" th:style="${session.roles.hasNext()?'':'pointer-events: none; opacity: 0.2'}" aria-label="Next"
+			 th:onclick="|selectPage(${session.roles.getNumber() + 2})|">
 	        <span aria-hidden="true">下一页</span>
 	      </a>
-			<a href="javascript:;" th:if="${pageNum ne rolesNum}" aria-label="Next">
-				<span aria-hidden="true">下一页</span>
-			</a>
 	    </li>
+		  <li>
+			  <div align="center">
+				  当前页数 <span th:text="${session.roles.getNumber() + 1}">1</span>
+				  /总页数<span th:text="${session.roles.getTotalPages()}">1</span>
+			  </div>
+		  </li>
 	  </ul>
 	</nav>
 </div>
@@ -96,11 +97,11 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label>用户名:</label>
-							<input type="text" name="role_name" class="form-control">
+							<input type="text" name="name" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>描述:</label>
-							<input type="text" id="description" name="description" class="form-control" />
+							<input type="text" name="description" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label>状态:</label>
@@ -157,38 +158,36 @@
 	}
 </style>
 <script type="text/javascript">
+	function selectPage(page) {
+		$("#role").load("/toRole/" + page)
+	}
 	$(function(){
 		// 显示删除模态框
 		var id;
 		$('.deleteUser').click(function(){
 			$('#deleteModal').show();
-			id = $(this).parent().parent().children().first().text().trim();
+			id = $(this).attr('roleId');
 		})
 		// 关闭删除模态框
 		$('.close').click(function(){
 			$('#deleteModal').hide();
-			id = "";
 		})
 		// 关闭删除模态框
 		$('.btn-default').click(function(){
 			$('#deleteModal').hide();
-			id = "";
 		})
 		// 确定删除
 		$('.btn-primary').click(function(){
 			$('#deleteModal').hide();
 			$.get("deleteRole", {role_id: id}, function (data) {
-				if(data == "success"){
-					$("#role").load("toRole");
-				}else{
-					alert(data);
-				}
+				alert(data);
+				$("#role").load("toRole");
 			})
-			id = "";
 		})
 		// 点击新增显示模态框
 		$('#add').click(function(){
 			$('#toAdd').show();
+			id="";
 		})
 		// 新增模态框关闭
 		$('button:contains(取消)').on('click',function(){
@@ -196,46 +195,31 @@
 				$('#toAdd').hide();
 				// form表单置空
 				document.getElementById('add-form').reset();
-				id = "";
 		})
 		// 新增模态框保存
 		$('.btn_saverole').on('click',function(){
-			var description = $("#description").val();
+			var description = $("input[name=description]").val();
 			var flag = $("select[name='flag'] option:selected").val();
-			var name = $("input[name='role_name']").val();
+			var name = $("input[name='name']").val();
 			$("#toAdd").hide();
 			if(name==""||description==""||flag==""){
 				alert("提交失败，不能为空");
 				return;
 			}
 			$.post("saveRole", {id: id, "name": name,description: description,flag: flag}, function (data) {
-				if(data == "success"){
-					$('#role').load('toRole');
-					//重新点击选择事件
-					// $("").trigger("click");
-				}else{
-					alert(data);
-				}
+				alert(data);
+				$('#role').load('toRole');
 			})
-			id = "";
 		})
 		// 点击编辑显示模态框
 		$('.editUser').click(function(){
 			$('#toAdd').show();
-			id = $(this).parent().parent().children().first().text().trim();
-		})
-		//分页
-		$(".pages").on("click", function () {
-			var page = $(this).text();
-			$("#role").load("/toRole/" + page);
-		})
-		$("a[aria-label=Next]").click(function () {
-			var nextPage = parseInt($("li[class=active]:first a").text()) + 1;
-			$("#role").load("/toRole/" + nextPage);
-		});
-		$("a[aria-label=Previous]").click(function () {
-			var previousPage = parseInt($("li[class=active]:first a").text()) - 1;
-			$("#role").load("/toRole/" + previousPage);
+			id = $(this).attr('roleId');
+			$.get('findRole',{id:id},function (data) {
+				$("input[name=description]").val(data.description);
+				$("select[name='flag'] option[value=" + data.flag + "]").prop('selected','selected');
+				$("input[name='name']").val(data.name);
+			})
 		})
 	})
 </script>

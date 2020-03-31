@@ -1,7 +1,7 @@
 package com.briup.crm.web.controller;
 
-import com.briup.crm.bean.Role;
 import com.briup.crm.bean.User;
+import com.briup.crm.service.IRoleService;
 import com.briup.crm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +23,8 @@ public class UserController {
     //service层
     @Autowired
     private IUserService service;
+    @Autowired
+    private IRoleService roleService;
 
     @RequestMapping("/user/login")
     @ResponseBody
@@ -57,16 +59,9 @@ public class UserController {
     @GetMapping(value = "toUser/{page}")
     public String toUserByPage(HttpSession session, Map<String, Object> map, @PathVariable("page") String pageStr){
         //将数据库中所有角色信息查询出来。保存到session中
-        Integer page = null;
-        try{
-            page = Integer.valueOf(pageStr);
-        } catch (NumberFormatException e){
-            page = 1;
-        }
-        Page<User> allUsers = service.findAllUsers(page - 1);
-        session.setAttribute("users", allUsers.getContent());
-        map.put("pageNum", page);
-        map.put("usersNum", service.getUserNum());
+        Page<User> allUsers = service.findAllUsers(Integer.parseInt(pageStr) - 1);
+        session.setAttribute("users", allUsers);
+        session.setAttribute("user_roles", roleService.findAll());
         return "pages/user";
     }
 
@@ -74,25 +69,41 @@ public class UserController {
     @ResponseBody
     public String deleteUser(@RequestParam("user_id") Integer id){
         service.deleteUser(id);
-        return "success";
+        return "删除成功";
     }
 
     @PostMapping("/saveUser")
     @ResponseBody
     public String saveUser(User user){
+        String info = user.getId()==null?"保存成功":"修改成功";
         service.saveUser(user);
-        return "success";
+        return info;
     }
 
-    @GetMapping(value = "toUser/byRole/{roleId}/{page}")
-    public String toUserByRole(HttpSession session, Map<String, Object> map
+    @GetMapping("/toUser/byRole/{roleId}/{page}")
+    public String toUserByRoleAndPage(HttpSession session, Map<String, Object> map
             , @PathVariable("page") String pageStr, @PathVariable("roleId") String roleIdStr){
-        //通过Role查询User并且附带分页功能
         Page<User> allUsers = service.findAllUsersByRole(pageStr,roleIdStr);
-        session.setAttribute("users", allUsers.getContent());
-        map.put("pageNum", Integer.valueOf(pageStr));
-        map.put("usersNum", service.getUserNumByRoleId(roleIdStr));
-        map.put("roleId", roleIdStr);
+        if(Integer.parseInt(pageStr) > allUsers.getTotalPages()) return "redirect:1";
+        session.setAttribute("users", allUsers);
+        session.setAttribute("user_roles", roleService.findAll());
+        map.put("roleId", Integer.valueOf(roleIdStr));
         return "pages/user";
     }
+
+    @GetMapping("/findUser")
+    @ResponseBody
+    public User findUser(Integer id){
+        return service.findUserById(id);
+    }
+
+//    @GetMapping("findAllUsers")
+//    public String findAllUsers(Integer roleId, Map<String, Object> map, HttpSession session){
+//        return "pages/user";
+//    }
+//
+//    @GetMapping("updatePages")
+//    public String updatePages(Integer roleId, Integer page, HttpSession session){
+//        return "pages/user";
+//    }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * @author kj
@@ -38,8 +38,12 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public Optional<Role> findRoleById(Integer id) {
-        return roleDao.findById(id);
+    public Role findRoleById(Integer id) {
+        //getOne会使用懒加载模式，并且是通过代理对象
+        //jackson序列化与hibernate中的懒加载冲突
+        //因为会懒加载会默认在代理对象中属性中加上he...而jackson解析不了这个，所有报错
+        //所以在类上加上@JsonIgnoreProperties("")
+        return roleDao.getOne(id);
     }
 
     @Override
@@ -51,5 +55,10 @@ public class RoleServiceImpl implements IRoleService {
     public Integer getRoleNumber() {
         int count = (int)roleDao.count();
         return count % 5 == 0? count / 5 : count / 5 + 1;
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleDao.findAll();
     }
 }

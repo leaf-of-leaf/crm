@@ -1,11 +1,19 @@
 package com.briup.crm.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "chance")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 public class Chance implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	private String source;
@@ -21,9 +29,13 @@ public class Chance implements Serializable{
 	private String linkman;
 	
 	private Integer phone;
-	
+
+	@OneToOne
+	@JoinColumn(name = "creator_id")
 	private User creator;
 
+	@OneToOne
+	@JoinColumn(name = "handler_id")
 	private User handler;
 	
 	private String description;

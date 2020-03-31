@@ -1,0 +1,16 @@
+fb5b113 HEAD@{0}: reset: moving to fb5b113
+4693985 HEAD@{1}: commit: asdasdasd
+fb5b113 HEAD@{2}: commit: html_jap modified
+88d68cf HEAD@{3}: checkout: moving from html to html_jpa
+88d68cf HEAD@{4}: commit: 2020/3/29 15:49 完成角色管理，用户管理的所有内容
+d921d3c HEAD@{5}: commit: 2020/3/28 21:11 完成角色管理，用户管理完成了新增，删除，保存
+c94fc0b HEAD@{6}: commit: finished index.html by thymeleaf
+64113bd HEAD@{7}: commit: 2020/3/27 html_1
+1e7309f HEAD@{8}: checkout: moving from html to html
+1e7309f HEAD@{9}: checkout: moving from html to html
+1e7309f HEAD@{10}: checkout: moving from master to html
+1e7309f HEAD@{11}: commit: 2020/2/26 17:40 完成登录功能
+b9b88ea HEAD@{12}: commit: 2020/3/26 crm_version_1.0
+4058205 HEAD@{13}: commit: 2020/3/26 crm_version_1.0
+f237166 HEAD@{14}: commit: 2020/3/26 crm_version_1.0
+9c11b02 HEAD@{15}: commit (initial): 2020/3/26 crm_version_1.0

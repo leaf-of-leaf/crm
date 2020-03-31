@@ -1,5 +1,7 @@
 package com.briup.crm.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,8 +9,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "role")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 public class Role implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +22,13 @@ public class Role implements Serializable {
 
 	private Integer flag;
 
-	
+	/**
+	 * mappedBy = "role" 中的role为User中和表相关联的属性
+	 * cascade = CascadeType.ALL 表示绑定级联的所有操作
+	 * fetch = FetchType.EAGER 表示需要立即加载，默认为懒加载
+	 */
+	@OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	private List<User> user;
 
 	
 	public Role() {

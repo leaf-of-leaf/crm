@@ -21,6 +21,7 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserDao userDao;
 
+
     @Override
     public User findByName(String name) {
         User user = userDao.findUserByName(name);
@@ -29,13 +30,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Page<User> findAllUsers(Integer page) {
-        return userDao.findAll(PageRequest.of(page,5));
-    }
-
-    @Override
-    public int getUserNum() {
-        int count = (int)userDao.count();
-        return count % 5 == 0? count / 5 : count / 5 + 1;
+        return userDao.findAll(PageRequest.of(page,3));
     }
 
     @Override
@@ -50,14 +45,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Page<User> findAllUsersByRole(String pageStr, String roleIdStr) {
-        return userDao.findUsersByRoleId(PageRequest.of(parseInt(pageStr) - 1,5),
+        return userDao.findUsersByRoleId(PageRequest.of(parseInt(pageStr) - 1,3),
                 parseInt(roleIdStr));
-    }
-
-    @Override
-    public int getUserNumByRoleId(String roleIdStr) {
-        int count = (int) userDao.countUsersByRoleId(parseInt(roleIdStr));
-        return count % 5 == 0? count / 5 : count / 5 + 1;
     }
 
     public Integer parseInt(String IntStr){
@@ -68,5 +57,10 @@ public class UserServiceImpl implements IUserService {
             result = 1;
         }
         return result;
+    }
+
+    @Override
+    public User findUserById(Integer id) {
+        return userDao.findUserById(id);
     }
 }

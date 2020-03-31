@@ -23,7 +23,7 @@ public class User implements Serializable {
 
     @JoinColumn(name = "role_id")
     @ManyToOne
-    @JsonIgnore //将来返回给前台时忽略当前属性
+    //@JsonIgnore //将来返回给前台时忽略当前属性
     //@ManyToOne要求相关联的两个javabean都有@Entity,且数据库中表不对应
     //要加入@Table(name = "")
     private Role role;
