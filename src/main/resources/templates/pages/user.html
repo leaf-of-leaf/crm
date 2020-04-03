@@ -4,7 +4,7 @@
   <div>
   <form class="form-inline">
   <div class="form-group">
-	<select name="city" id="searchRoleId" class="form-control" th:attr="roleId=${roleId}">
+	<select name="city" id="searchRoleId" class="form-control" th:attr="roleId=${session.roleId}">
 		 <option value="">请选择用户角色类型</option>
         <th:block th:each="role:${session.user_roles}">
 			<option value="1" th:value="${role.id}" th:text="${role.name}">管理员</option>
@@ -90,7 +90,7 @@
 <div class="modal"  id="toAdd">
   <div class="modal-dialog" style="height:400px;overflow:auto;">
     <div class="modal-content">
-       <form>
+       <form id="saveForm">
 					<div class="modal-body">
 						<div class="form-group">
 							<label>用户名:</label>
@@ -166,10 +166,7 @@
 <script type="text/javascript">
 	function selectPage(page) {
 		var roleId = $("#searchRoleId option:selected").val();
-		if(! !!roleId)
-			$("#user").load("/toUser/" + page);
-		else
-			$("#user").load("/toUser/byRole/" + roleId + "/" + page);
+		$("#user").load("/updateUserPages",{roleId:roleId,page:page});
 	}
 	$(function(){
 		var id;
@@ -201,6 +198,8 @@
 		$('#add').click(function(){
 			id = "";
 			$('#toAdd').show();
+			$("#saveForm")[0].reset();
+
 		})
 		// 新增模态框关闭
 		$('button:contains(取消)').on('click',function(){
@@ -233,27 +232,22 @@
 				$("select[name='flag'] option[value=" + data.flag + "]").prop('selected','selected');
 				$("input[name='user_name']").val(data.name);
 				$("input[name='password']").val(data.password);
+				alert(data.role);
 				$("#role_id option[value=" + data.role.id + "]").prop('selected','selected');
 			})
 		})
 		// 查询
 		$('.search').click(function(){
 			var roleId = $("#searchRoleId option:selected").val();
-			if(!!roleId){
-				$("#user").load("/toUser/byRole/" + roleId + "/1");
-				//试试用callback将
-			}else{
-				$("#user").load("/toUser/1");
-			}
+			$("#user").load("findAllUsers",{roleId:roleId});
 		})
 		//重置
 		$('input[type=reset]').click(function () {
 			$("#searchRoleId option[value=" + roleId + "]").removeProp('selected');
 			$('.search').click();
 		})
-
-		var roleId= $("#searchRoleId").attr('roleId');
-		$("#searchRoleId option[value=" + roleId + "]").prop('selected','selected');
+		var roleId = $("#searchRoleId").attr('roleId')
+		if(!!roleId) $("#searchRoleId option[value=" + roleId + "]").prop('selected','selected');
 	})
 </script>
 </html>

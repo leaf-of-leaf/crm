@@ -4,20 +4,20 @@
   <div>
   <form class="form-inline">
   <div class="form-group">
-    <input type="text" class="form-control" id="exampleInputEmail3" placeholder="请输入客户名称">
+    <input th:value="${session.customer}" type="text" class="form-control" id="exampleInputEmail3" placeholder="请输入客户名称">
   </div>
 
   <div class="form-group">
-	<select name="city" id="" class="form-control">
-		<option value="">请选择所属地区</option>
-        <option value="0">华中</option>
-        <option value="1">华北</option>
-        <option value="2">华南</option>
-        <option value="3">华东</option>
+	<select th:attr="address=${session.address}" name="city" id="address" class="form-control">
+		<option value="0">请选择所属地区</option>
+        <option value="1">华中</option>
+        <option value="2">华北</option>
+        <option value="3">华南</option>
+        <option value="4">华东</option>
 	</select>
   </div>
   <input class="btn btn-default search" type="button" value="查询">
-  <input class="btn btn-default" type="reset" value="重置">
+  <input class="btn btn-default" type="reset" value="重置" id="reset">
   <input class="btn btn-default" type="button" value="新增" id="add">
 
 </form>
@@ -36,8 +36,15 @@
 			  <th>操作</th>
 		    </tr> 
 		  </thead>
-
 		  <tbody>
+		  	<tr th:if="${session.chances.getTotalPages() eq 0}">
+				<td>查询无果</td>
+				<td>查询无果</td>
+				<td>查询无果</td>
+				<td>查询无果</td>
+				<td>查询无果</td>
+				<td>查询无果</td>
+			</tr>
 		  	<th:block th:each="chance:${session.chances}">
 				<tr>
 					<td th:text="${chance.id}">3</td>
@@ -45,10 +52,10 @@
 					<td th:text="${chance.description}">这是概要,概要</td>
 					<td th:text="${chance.linkman}">王五</td>
 					<td th:text="${chance.phone}">1897456</td>
-					<td th:text="${chance.handler.name}">指派啊</td>
+					<td th:text="${#strings.isEmpty(chance.handler.name)?'处理人不存在，请重新指派':chance.handler.name}">指派啊</td>
 					<td>
-						<i th:attr="chanceId=${chance.id}" class="layui-icon layui-icon-edit editUser"></i>
-						<i th:attr="chanceId=${chance.id}" class="layui-icon layui-icon-delete deleteUser"></i>
+						<i th:attr="chanceid=${chance.id}" class="layui-icon layui-icon-edit editUser"></i>
+						<i th:attr="chanceid=${chance.id}" class="layui-icon layui-icon-delete deleteUser"></i>
 					</td>
 				</tr>
 			</th:block>
@@ -63,9 +70,13 @@
 				 th:onclick="|selectPage(${session.chances.getNumber()})|">
 				  <span aria-hidden="true">上一页</span>
 			  </a>
+<!--			  session中的users中遍历user.role.name与后台用@ResponseBody返回user的json格式时是不一样的，后者用@JsonIgnore
+					是能忽略role的而前者是在session中，不会被@JsonIgnore影响
+					select中用val传入value值能吧对应的option勾选上-->
 		  </li>
-		  <th:block th:each="page:${#numbers.sequence(1, session.chances.getTotalPages())}">
+		  <th:block th:each="page:${#numbers.sequence(1, session.chances.getTotalPages() eq 0 ? 1 : session.chances.getTotalPages())}">
 			  <li th:class="${pageStat.count eq session.chances.getNumber() + 1 ? 'active':''}"><a th:onclick="|selectPage(${pageStat.count})|" th:text="${pageStat.count}" href="javascript:;" class="pages"></a></li>
+
 		  </th:block>
 		  <li>
 			  <a href="javascript:;" th:style="${session.chances.hasNext()?'':'pointer-events: none; opacity: 0.2'}" aria-label="Next"
@@ -76,7 +87,7 @@
 		  <li>
 			  <div align="center">
 				  当前页数 <span th:text="${session.chances.getNumber() + 1}">1</span>
-				  /总页数<span th:text="${session.chances.getTotalPages()}">1</span>
+				  /总页数<span th:text="${session.chances.getTotalPages() eq 0?1:session.chances.getTotalPages()}">1</span>
 			  </div>
 		  </li>
 	  </ul>
@@ -101,27 +112,27 @@
 <div class="modal"  id="toAdd">
   <div class="modal-dialog" style="height:400px;overflow:auto;">
     <div class="modal-content">
-       <form>
+       <form id="ChanceForm">
 					<div class="modal-body">
 						<div class="form-group">
 							<label>商机来源:</label>
-							<input type="text" name="lmName"  class="form-control">
+							<input type="text" name="source"  class="form-control">
 						</div>
 						<div class="form-group">
 							<label>客户名称:</label>
-							<input type="text" name="msName" class="form-control">
+							<input type="text" name="customer" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>成功几率:</label>
-							<input type="text" name="msName" class="form-control">
+							<input type="text" name="rate" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>商机概要:</label>
-							<input type="text" name="msName" class="form-control">
+							<input type="text" name="title" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>所属地区:</label>
-							<select name="flmName" id="" class="form-control">
+							<select name="address" id="" class="form-control">
 								<option value="">请选择所属地区</option>
 						        <option value="0">华中</option>
 						        <option value="1">华北</option>
@@ -131,28 +142,28 @@
 						</div>
 						<div class="form-group">
 							<label>联系人:</label>
-							<input type="text" name="msName" class="form-control">
+							<input type="text" name="linkman" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>联系电话:</label>
-							<input type="text" name="msName" class="form-control">
+							<input type="text" name="phone" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>创建人:</label>
-							<input type="text" name="msName" class="form-control">
+							<input readonly="readonly" th:value="${session.user.name}" type="text" name="create" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>处理人:</label>
-							<select name="flmName" id="" class="form-control">
+							<select name="handler" id="" class="form-control">
 								<option value="">请选择处理人</option>
-						        <option value="0">jingli1</option>
-						        <option value="1">jingli2</option>
-						        <option value="2">jingli3</option>
+						        <th:block th:each="manager:${session.managers}">
+									<option th:value="${manager.id}" th:text="${manager.name}"></option>
+								</th:block>
 							</select>
 						</div>
 						<div class="form-group">
 							<label>商机描述:</label>
-							<input type="textarea" name="msName" style="height:60px" class="form-control">
+							<input type="textarea" name="description" style="height:60px" class="form-control">
 						</div>
 					</div>
 				</form>
@@ -203,16 +214,13 @@
 </style>
 <script type="text/javascript">
 	function selectPage(page) {
-		// var roleId = $("#searchRoleId option:selected").val();
-		// if(! !!roleId)
-			$("#sales").load("/toSale/" + page);
-		// else
-		// 	$("#user").load("/toUser/byRole/" + roleId + "/" + page);
+		$("#sales").load("updateChancePages",{page:page});
 	}
 	$(function(){
 		var id = null;
 		// 显示删除模态框
 		$('.deleteUser').click(function(){
+			id = $(this).attr('chanceid');
 			$('#deleteModal').show();
 		})
 		// 关闭删除模态框
@@ -226,34 +234,93 @@
 		// 确定删除
 		$('.btn-primary').click(function(){
 			$('#deleteModal').hide();
-			id = $(this).attr('chanceId');
 			$.get("deleteChance", {id:id}, function (data) {
 				alert(data);
+				$("#sales").load("/findAllChance");
 			})
 		})
 		// 点击新增显示模态框
 		$('#add').click(function(){
 			$('#toAdd').show();
 			id = "";
+			$("#ChanceForm")[0].reset();
 		})
 		// 新增模态框关闭
 		$('button:contains(取消)').on('click',function(){
 			$('button[type=reset]').trigger('click');
-				$('#toAdd').hide();
+			$('#toAdd').hide();
 		})
 		// 新增模态框保存
 		$('button:contains(保存)').on('click',function(){
-				$('#toAdd').hide();
-		})	
+			$('#toAdd').hide();
+			var source = $("input[name=source]").val();
+			var customer = $("input[name=customer]").val();
+			var rate = $("input[name=rate]").val();
+			var title = $("input[name=title]").val();
+			var linkman = $("input[name=linkman]").val();
+			var phone = $("input[name=phone]").val();
+			var creator = $("input[name=create]").val();
+			var description = $("input[name=description]").val();
+
+			var address = $("select[name='address'] option:selected").text();
+			var handler = $("select[name='handler'] option:selected").val();
+
+			phone = Number(phone);
+			if(! !!phone){
+				alert("联系电话输入不正确!");
+				$('#toAdd').show();
+				return;
+			}
+			$.post("saveChance", {id:id,source:source,customer:customer,rate:rate,title:title,linkman:linkman,
+									phone:phone,'creator.name':creator,description:description,address:address,
+									'handler.id':handler,status:"待处理"}, function (data) {
+				alert(data);
+				$("#sales").load("/findAllChance");
+			})
+		})
 		// 点击编辑显示模态框
 		$('.editUser').click(function(){
 			$('#toAdd').show();
-			id = $(this).attr('chanceId');
+			id = $(this).attr('chanceid');
+			$.get("findChance",{id:id},function (data) {
+				$("input[name=source]").val(data.source);
+				$("input[name=customer]").val(data.customer);
+				$("input[name=rate]").val(data.rate);
+				$("input[name=title]").val(data.title);
+				$("input[name=linkman]").val(data.linkman);
+				$("input[name=phone]").val(data.phone);
+				// $("input[name=create]").val(data.creator.name);
+				$("input[name=description]").val(data.description);
 
+				$("select[name='address'] option").each(function () {
+					if(data.address == $(this).text()){
+						$(this).prop('selected','selected');
+						return false;
+					}
+				});
+				$("select[name='handler'] option[value="+data.handler.id+"]").prop('selected','selected');
+			})
 		})
 		// 查询
 		$('.search').click(function(){
-			alert('查询')
+			var address = $("#address option:selected").text();
+			if(address == "请选择所属地区") address = "";
+			var customer = $("#exampleInputEmail3").val();
+			$("#sales").load("findAllChance",{address:address,customer:customer});
+		})
+		var address = $("#address").attr('address');
+		if(!!address){
+			$("#address option").each(function () {
+				if($(this).text() == address){
+					$(this).prop('selected','selected');
+					return false;
+				}
+			})
+		}
+		$("#reset").click(function () {
+			$("#address option[value=" + "0" + "]").prop("selected","selected");
+			$("#exampleInputEmail3").val("");
+			$(".search").click();
 		})
 	})
 </script>

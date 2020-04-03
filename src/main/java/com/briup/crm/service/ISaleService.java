@@ -13,13 +13,6 @@ import org.springframework.data.domain.Pageable;
 public interface ISaleService {
 
     /**
-     * 分页查询
-     * @param pageable
-     * @return
-     */
-    Page<Chance> findAllChance(Integer page);
-
-    /**
      * 删除Chance
      * @param id
      */
@@ -38,4 +31,28 @@ public interface ISaleService {
      */
     void saveChance(Chance chance);
 
+    /**
+     *
+     * @param address
+     * @param page
+     * @return
+     */
+    Page<Chance> findAllChance(String address, String customer, Integer page);
+    Page<Chance> findAllChanceByAddress(String address);
+    Page<Chance> findAllChanceByCustomer(String customer);
+    Page<Chance> findAllChanceByAddressAndPage(String address, Integer page);
+    Page<Chance> findAllChanceByCustomerAndPage(String customer, Integer page);
+    Page<Chance> findAllChanceByAddressAndCustomer(
+            String address,
+            String customer
+    );
+    Page<Chance> findAllChanceByAddressAndCustomerAndPage(
+            String address,
+            String customer,
+            Integer page
+    );
+
+    Page<Chance> findAllChanceByUser(Integer page, Integer user_id, String address);
+    Page<Chance> findAllChanceByUser(Integer page, Integer user_id);
+    Page<Chance> findAllChanceByUserAndAddress(Integer page, Integer user_id, String address);
 }

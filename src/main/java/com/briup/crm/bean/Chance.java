@@ -1,9 +1,11 @@
 package com.briup.crm.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "chance")
@@ -42,11 +44,15 @@ public class Chance implements Serializable{
 	
 	private String status;
 
+	@OneToMany(mappedBy = "chance", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@JsonIgnore
+	private List<Plan> plans;
+
 	public Chance() {
 	}
 
 	public Chance(Integer id, String source, String customer, String rate, String title, String address, String linkman,
-			Integer phone, User creator, User handler, String description) {
+			Integer phone, User creator, User handler, String description, String status) {
 		this.id = id;
 		this.source = source;
 		this.customer = customer;
@@ -58,6 +64,7 @@ public class Chance implements Serializable{
 		this.creator = creator;
 		this.handler = handler;
 		this.description = description;
+		this.status = status;
 	}
 
 	public Integer getId() {

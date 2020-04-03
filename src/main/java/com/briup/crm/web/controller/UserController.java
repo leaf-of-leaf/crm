@@ -1,5 +1,6 @@
 package com.briup.crm.web.controller;
 
+import com.briup.crm.bean.Role;
 import com.briup.crm.bean.User;
 import com.briup.crm.service.IRoleService;
 import com.briup.crm.service.IUserService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,16 +55,7 @@ public class UserController {
 
     @GetMapping("/toUser")
     public String toUser(){
-        return "redirect:toUser/1";
-    }
-
-    @GetMapping(value = "toUser/{page}")
-    public String toUserByPage(HttpSession session, Map<String, Object> map, @PathVariable("page") String pageStr){
-        //将数据库中所有角色信息查询出来。保存到session中
-        Page<User> allUsers = service.findAllUsers(Integer.parseInt(pageStr) - 1);
-        session.setAttribute("users", allUsers);
-        session.setAttribute("user_roles", roleService.findAll());
-        return "pages/user";
+        return "redirect:findAllUsers";
     }
 
     @GetMapping("/deleteUser")
@@ -80,30 +73,28 @@ public class UserController {
         return info;
     }
 
-    @GetMapping("/toUser/byRole/{roleId}/{page}")
-    public String toUserByRoleAndPage(HttpSession session, Map<String, Object> map
-            , @PathVariable("page") String pageStr, @PathVariable("roleId") String roleIdStr){
-        Page<User> allUsers = service.findAllUsersByRole(pageStr,roleIdStr);
-        if(Integer.parseInt(pageStr) > allUsers.getTotalPages()) return "redirect:1";
-        session.setAttribute("users", allUsers);
-        session.setAttribute("user_roles", roleService.findAll());
-        map.put("roleId", Integer.valueOf(roleIdStr));
-        return "pages/user";
-    }
-
     @GetMapping("/findUser")
     @ResponseBody
     public User findUser(Integer id){
         return service.findUserById(id);
     }
 
-//    @GetMapping("findAllUsers")
-//    public String findAllUsers(Integer roleId, Map<String, Object> map, HttpSession session){
-//        return "pages/user";
-//    }
-//
-//    @GetMapping("updatePages")
-//    public String updatePages(Integer roleId, Integer page, HttpSession session){
-//        return "pages/user";
-//    }
+    @RequestMapping("/findAllUsers")
+    public String findAllUsers(Integer roleId, HttpSession session){
+        Page<User> allUsers = service.findAllUsers(roleId, null);
+        List<Role> Roles = roleService.findAll();
+        session.setAttribute("user_roles", Roles);
+        session.setAttribute("users", allUsers);
+        session.setAttribute("roleId", roleId);
+        return "pages/user";
+    }
+
+    @RequestMapping("/updateUserPages")
+    public String updatePages(Integer page, HttpSession session){
+        Page<User> allUsers = service.findAllUsers((Integer) session.getAttribute("roleId"), page);
+        List<Role> Roles = roleService.findAll();
+        session.setAttribute("user_roles", Roles);
+        session.setAttribute("users", allUsers);
+        return "pages/user";
+    }
 }

@@ -15,13 +15,17 @@ public interface IUserService {
 
    User findByName(String name);
 
-   Page<User> findAllUsers(Integer page);
+   Page<User> findAllUsersByRole(Integer roleId);
+   Page<User> findAllUsers(Integer roleId, Integer page);
+
+   List<User> findAllUsersByRoleId(Integer roleId);
+
    //删除User
    void deleteUser(Integer id);
    //保存或修改User
    void saveUser(User user);
 
-   Page<User> findAllUsersByRole(String pageStr, String roleIdStr);
+   Page<User> findAllUsersByRoleAndPage(Integer roleId, Integer page);
 
    User findUserById(Integer id);
 }

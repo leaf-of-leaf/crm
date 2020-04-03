@@ -2,7 +2,7 @@ $(function(){
   $('.layui-nav-child').on({
     click:function(){
       if($(this).text().trim()=="商机开发计划"){
-        $('.layui-body').load('pages/plan.html');
+        $('.layui-body').load('/plan');
       }
        if($(this).text().trim()=="销售商机管理"){
         $('.layui-body').load('toSale');
@@ -10,9 +10,9 @@ $(function(){
        if($(this).text().trim()=="客户信息查询"){
         $('.layui-body').load('pages/customer.html');
       }
-      // if($(this).text()=="客户信息添加"){
-      //   $('.layui-body').load('./pages/customer_add.html');
-      // }
+      if($(this).text()=="客户信息添加"){
+        $('.layui-body').load('./pages/customer_add.html');
+      }
       if($(this).text().trim()=="服务反馈"){
         $('.layui-body').load('pages/feedback.html');
         
@@ -22,11 +22,11 @@ $(function(){
        
       }
       if($(this).text().trim()=="客户贡献分析"){
-        $('.layui-body').load('pages/customerContribution.html');
+        $('.layui-body').load('/toCustomerContribution');
        
       }
        if($(this).text().trim()=="客户构成分析"){
-        $('.layui-body').load('pages/customerConstitute.html');
+        $('.layui-body').load('/toCustomerConstitute');
         
       }
        if($(this).text().trim()=="角色管理"){

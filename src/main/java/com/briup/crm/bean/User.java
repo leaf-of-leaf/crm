@@ -1,7 +1,5 @@
 package com.briup.crm.bean;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 

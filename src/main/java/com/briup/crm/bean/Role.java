@@ -1,5 +1,6 @@
 package com.briup.crm.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -24,10 +25,11 @@ public class Role implements Serializable {
 
 	/**
 	 * mappedBy = "role" 中的role为User中和表相关联的属性
-	 * cascade = CascadeType.ALL 表示绑定级联的所有操作
+	 * cascade = CascadeType.ALL 表示绑定级联的所有操作,这个也是级联查询的关键
 	 * fetch = FetchType.EAGER 表示需要立即加载，默认为懒加载
 	 */
-	@OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<User> user;
 
 	

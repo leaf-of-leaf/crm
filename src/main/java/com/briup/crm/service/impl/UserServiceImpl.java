@@ -2,11 +2,14 @@ package com.briup.crm.service.impl;
 
 import com.briup.crm.bean.User;
 import com.briup.crm.dao.UserDao;
+import com.briup.crm.service.IRoleService;
 import com.briup.crm.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author kj
@@ -27,14 +30,9 @@ public class UserServiceImpl implements IUserService {
         User user = userDao.findUserByName(name);
         return user;
     }
-
-    @Override
-    public Page<User> findAllUsers(Integer page) {
-        return userDao.findAll(PageRequest.of(page,3));
-    }
-
     @Override
     public void deleteUser(Integer id) {
+        System.out.println("执行了userDao deleteById");
         userDao.deleteById(id);
     }
 
@@ -43,11 +41,7 @@ public class UserServiceImpl implements IUserService {
         userDao.save(user);
     }
 
-    @Override
-    public Page<User> findAllUsersByRole(String pageStr, String roleIdStr) {
-        return userDao.findUsersByRoleId(PageRequest.of(parseInt(pageStr) - 1,3),
-                parseInt(roleIdStr));
-    }
+
 
     public Integer parseInt(String IntStr){
         Integer result = null;
@@ -62,5 +56,37 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User findUserById(Integer id) {
         return userDao.findUserById(id);
+    }
+
+    @Override
+    public Page<User> findAllUsersByRoleAndPage(Integer roleId, Integer page) {
+        if(roleId == null){
+            return userDao.findAll(PageRequest.of(page-1, 3));
+        }else{
+            return userDao.findUsersByRoleId(PageRequest.of(page-1,3), roleId);
+        }
+    }
+
+    @Override
+    public Page<User> findAllUsersByRole(Integer roleId) {
+        if(roleId == null){
+            return userDao.findAll(PageRequest.of(0, 3));
+        }else{
+            return userDao.findUsersByRoleId(PageRequest.of(0,3), roleId);
+        }
+    }
+
+    @Override
+    public Page<User> findAllUsers(Integer roleId, Integer page) {
+        if(page == null){
+            return findAllUsersByRole(roleId);
+        }else {
+            return findAllUsersByRoleAndPage(roleId,page);
+        }
+    }
+
+    @Override
+    public List<User> findAllUsersByRoleId(Integer roleId) {
+        return userDao.findUsersByRoleId(roleId);
     }
 }
