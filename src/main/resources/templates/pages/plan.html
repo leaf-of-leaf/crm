@@ -56,8 +56,8 @@
 					<td th:text="${chance.phone}">15864789213</td>
 					<td th:text="${chance.status}">处理中</td>
 					<td>
-						<i th:if="${chance.status eq '处理完成'}" class="layui-icon layui-icon-face-smile"></i>
-						<i th:if="${chance.status eq '处理中'}" class="layui-icon layui-icon-fonts-code"></i>
+						<i th:attr="chanceId=${chance.id}" th:if="${chance.status eq '处理完成'}" class="layui-icon layui-icon-face-smile"></i>
+						<i th:attr="chanceId=${chance.id}" th:if="${chance.status eq '处理中'}" class="layui-icon layui-icon-fonts-code"></i>
 						<i th:attr="chanceId=${chance.id}" th:if="${chance.status eq '待处理'}" class="layui-icon layui-icon-loading"></i>
 					</td>
 				</tr>
@@ -137,10 +137,12 @@
 			$('.layui-body').load('planAdd', {chanceId:chanceId});
 		})
 		$('.layui-icon-fonts-code').click(function(){
-			$('.layui-body').load('planEdit');
+			var chanceId = $(this).attr('chanceId');
+			$('.layui-body').load('planEdit/' + chanceId);
 		})
 		$('.layui-icon-face-smile').click(function(){
-			$('.layui-body').load('planDetail');
+			var chanceId = $(this).attr('chanceId');
+			$('.layui-body').load('planDetail', {chanceId:chanceId});
 		})
 	})
 </script>

@@ -13,8 +13,12 @@ import java.util.List;
  */
 public interface IPlanService {
 
+
     List<Plan> findPlansByUserIdAndChanceId(Integer userId, Integer chanceId);
+    //通过chanceId查找所有plans
+    List<Plan> findPlansByChanceId(Integer chanceId);
     void deletePlanById(Integer planId);
     void savePlan(Plan plan);
+    Plan findPlanById(Integer planId);
 
 }

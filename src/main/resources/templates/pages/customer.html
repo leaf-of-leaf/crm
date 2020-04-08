@@ -1,136 +1,118 @@
+<html xmlns:th="http://www.thymeleaf.org">
 <!-- 客户信息查询 -->
 <div id="customer">
-<div>
-  <form class="form-inline">
-  <div class="form-group">
-    <input type="text" class="form-control" id="exampleInputEmail3" placeholder="请输入客户名称" />
-  </div>
-  <!-- <div class="form-group">
-    <input type="text" class="form-control" id="exampleInputPassword3" placeholder="请输入客户经理">
-  </div> -->
-  <div class="form-group">
-	<select name="city" id="" class="form-control">
-		 <option value="">请选择所属地区</option>
-        <option value="0">华中</option>
-        <option value="1">华北</option>
-        <option value="2">华南</option>
-        <option value="3">华东</option>
-	</select>
-  </div>
-  <div class="form-group">
-	<select name="lever" id="" class="form-control">
-		<option value="">请选择客户等级</option>
-        <option value="0">普通客户</option>
-        <option value="1">大客户</option>
-        <option value="2">重点开发客户</option>
-        <option value="3">合作伙伴</option>
-        <option value="4">战略合作伙伴</option>
-	</select>
-  </div>
-  <input class="btn btn-default search" type="button" value="查询" />
-  <input class="btn btn-default" type="reset" value="重置" />
-  <input class="btn btn-default" type="button" value="新增" id="add" />
-</form>
-</div>
-<div>
-	<table class="table table-hover">
-		 <thead>
-		    <tr style="background:#E8E8E8;">
-		      <th>序号</th>
-		      <th>客户名称</th>
-		      <th>客户经理</th>
-		      <th>所属地区</th>
-		      <th>客户等级</th>			 
-			  <th >操作</th>
-		    </tr> 
-		  </thead>
+	<div>
+		<form class="form-inline">
+			<div class="form-group">
+				<input type="text" class="form-control" id="customerName" placeholder="请输入客户名称" />
+			</div>
+			<!-- <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputPassword3" placeholder="请输入客户经理">
+            </div> -->
+			<div class="form-group">
+				<select name="city" id="searchRegion" class="form-control">
+					<option value="">请选择所属地区</option>
+					<option value="华中">华中</option>
+					<option value="华北">华北</option>
+					<option value="华南">华南</option>
+					<option value="华东">华东</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<select name="lever" id="searchLevel" class="form-control">
+					<option value="">请选择客户等级</option>
+					<option value="普通客户">普通客户</option>
+					<option value="大客户">大客户</option>
+					<option value="重点开发客户">重点开发客户</option>
+					<option value="合作伙伴">合作伙伴</option>
+					<option value="战略合作伙伴">战略合作伙伴</option>
+				</select>
+			</div>
+			<input class="btn btn-default search" type="button" value="查询" />
+			<input class="btn btn-default" type="reset" value="重置" />
+			<input class="btn btn-default" type="button" value="新增" id="add" />
+		</form>
+	</div>
+	<div>
+		<table class="table table-hover">
+			<thead>
+			<tr style="background:#E8E8E8;">
+				<th>序号</th>
+				<th>客户名称</th>
+				<th>客户经理</th>
+				<th>所属地区</th>
+				<th>客户等级</th>
+				<th >操作</th>
+			</tr>
+			</thead>
 
-		  <tbody>
-		    <tr>
-		      <td>1</td>
-		      <td>张三</td>
-		      <td>李四</td>
-		      <td>江苏昆山</td>
-		      <td>一星</td>		     
-		      <td class="test">	
-		      	<i class="layui-icon layui-icon-edit first" title="编辑客户信息"></i> 
-		        <i class="layui-icon layui-icon-username user" title="编辑联系人信息"></i>  
-		      	<i class="layui-icon layui-icon-read editRecord" title="编辑交往记录"></i>
-		        <i class="layui-icon layui-icon-delete deletee" title="删除客户记录"></i>    
-		      </td>
-		    </tr> 
-		    <tr>
-		      <td>2</td>
-		      <td>王五</td>
-		      <td>张伟</td>
-		      <td>上海</td>
-		      <td>三星</td>		     
-		      <td class="test">	
-		      	<i class="layui-icon layui-icon-edit first" title="编辑客户信息"></i> 
-		        <i class="layui-icon layui-icon-username user" title="编辑联系人信息"></i>  
-		      	<i class="layui-icon layui-icon-read editRecord" title="编辑交往记录"></i>
-		        <i class="layui-icon layui-icon-delete deletee" title="删除客户记录"></i>    
-		      </td>
-		    </tr>  
-		    <tr>
-		      <td>3</td>
-		      <td>李伟</td>
-		      <td>刘磊</td>
-		      <td>安徽合肥</td>
-		      <td>四星</td>		     
-		      <td class="test">	
-		      	<i class="layui-icon layui-icon-edit first" title="编辑客户信息"></i> 
-		        <i class="layui-icon layui-icon-username user" title="编辑联系人信息"></i>  
-		      	<i class="layui-icon layui-icon-read editRecord" title="编辑交往记录"></i>
-		        <i class="layui-icon layui-icon-delete deletee" title="删除客户记录"></i>    
-		      </td>
-		    </tr> 
-		    
-         </tbody>
-    </table>
-</div>
-<div class="fenye">
-	<nav aria-label="Page navigation">
-	  <ul class="pagination">
-	    <li>
-	      <a href="#" aria-label="Previous">
-	        <span aria-hidden="true">上一页</span>
-	      </a>
-	    </li>
-	    <li class="active"><a href="#">1</a></li>
-	    <li><a href="#">2</a></li>
-	    <li><a href="#">3</a></li>
-	    <li><a href="#">4</a></li>
-	    <li><a href="#">5</a></li>
-	    <li>
-	      <a href="#" aria-label="Next">
-	        <span aria-hidden="true">下一页</span>
-	      </a>
-	    </li>
-	  </ul>
-	</nav>
-</div>
-<!-- 删除模态框 -->
-<div class="modal" id="deleteModal">
-  <div class="modal-dialog"  style="width:350px;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">是否确定删除</h4>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default " data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">确定</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 新增模态框 -->
-<div class="modal"  id="toAdd">
-  <div class="modal-dialog" style="height:400px;overflow:auto;">
-    <div class="modal-content">
-       <form>
+			<tbody>
+				<th:block th:each="c:${session.customers}">
+					<tr>
+						<td th:text="${c.id}">1</td>
+						<td th:text="${c.name}">张三</td>
+						<td th:text="${c.manager.name}">李四</td>
+						<td th:text="${c.address}">江苏昆山</td>
+						<td th:text="${c.level}">一星</td>
+						<td class="test">
+							<i th:attr="customerId=${c.id}" class="layui-icon layui-icon-edit first" title="编辑客户信息"></i>
+							<i th:attr="customerId=${c.id}" class="layui-icon layui-icon-username user" title="编辑联系人信息"></i>
+							<i th:attr="customerId=${c.id}" class="layui-icon layui-icon-read editRecord" title="编辑交往记录"></i>
+							<i th:attr="customerId=${c.id}" class="layui-icon layui-icon-delete deletee" title="删除客户记录"></i>
+						</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+	<div class="fenye">
+		<nav aria-label="Page navigation">
+			<ul class="pagination">
+				<li>
+					<a href="javascript:;" th:style="${session.customers.hasPrevious()?'':'pointer-events: none; opacity: 0.2'}" aria-label="Previous"
+					   th:onclick="|selectPage(${session.customers.getNumber()})|">
+						<span aria-hidden="true">上一页</span>
+					</a>
+				</li>
+				<th:block th:each="page:${#numbers.sequence(1, session.customers.getTotalPages())}">
+					<li th:class="${pageStat.count eq session.customers.getNumber() + 1 ? 'active':''}"><a th:onclick="|selectPage(${pageStat.count})|" th:text="${pageStat.count}" href="javascript:;" class="pages"></a></li>
+				</th:block>
+				<li>
+					<a href="javascript:;" th:style="${session.customers.hasNext()?'':'pointer-events: none; opacity: 0.2'}" aria-label="Next"
+					   th:onclick="|selectPage(${session.customers.getNumber() + 2})|">
+						<span aria-hidden="true">下一页</span>
+					</a>
+				</li>
+				<li>
+					<div align="center">
+						当前页数 <span th:text="${session.customers.getNumber() + 1}">1</span>
+						/总页数<span th:text="${session.customers.getTotalPages()}">1</span>
+					</div>
+				</li>
+			</ul>
+		</nav>
+	</div>
+	<!-- 删除模态框 -->
+	<div class="modal" id="deleteModal">
+		<div class="modal-dialog"  style="width:350px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">是否确定删除</h4>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default " data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 新增模态框 -->
+	<div class="modal"  id="toAdd">
+		<div class="modal-dialog" style="height:400px;overflow:auto;">
+			<div class="modal-content">
+				<form>
 					<div class="modal-body">
 						<div class="form-group">
 							<label>客户姓名:</label>
@@ -144,21 +126,21 @@
 							<label>所属地区:</label>
 							<select name="flmName" id="" class="form-control">
 								<option value="">请选择所属地区</option>
-						        <option value="0">华中</option>
-						        <option value="1">华北</option>
-						        <option value="2">华南</option>
-						        <option value="3">华东</option>
+								<option value="0">华中</option>
+								<option value="1">华北</option>
+								<option value="2">华南</option>
+								<option value="3">华东</option>
 							</select>
 						</div>
 						<div class="form-group">
 							<label>客户等级:</label>
 							<select name="flmName" id="" class="form-control">
 								<option value="">请选择客户等级</option>
-						        <option value="0">普通客户</option>
-						        <option value="1">大客户</option>
-						        <option value="2">重点开发客户</option>
-						        <option value="3">合作伙伴</option>
-						        <option value="4">战略合作伙伴</option>
+								<option value="0">普通客户</option>
+								<option value="1">大客户</option>
+								<option value="2">重点开发客户</option>
+								<option value="3">合作伙伴</option>
+								<option value="4">战略合作伙伴</option>
 							</select>
 						</div>
 						<div class="form-group">
@@ -216,28 +198,28 @@
 					</div>
 				</form>
 				<div class="modal-footer">
-				    <button class="btn" style="background:#ccc">取消</button>
+					<button class="btn" style="background:#ccc">取消</button>
 					<button class="btn" style="background:#ccc">保存</button>
 				</div>
-    </div>
-  </div>
-</div>
+			</div>
+		</div>
+	</div>
 </div>
 <style>
-#customer{
-	width: 1140px;
-	overflow: hidden;
-}
-.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-    background-color: #ccc;
-    border-color: #ccc;
-}
-.pagination > li > a, .pagination > li > span {
-    color: black;
-}
-.fenye{
-	margin-left: 400px;
-}
+	#customer{
+		width: 1140px;
+		overflow: hidden;
+	}
+	.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+		background-color: #ccc;
+		border-color: #ccc;
+	}
+	.pagination > li > a, .pagination > li > span {
+		color: black;
+	}
+	.fenye{
+		margin-left: 400px;
+	}
 	.form-inline{
 		margin-top: 15px;
 		margin-left: 10px;
@@ -260,12 +242,15 @@
 	}
 </style>
 <script type="text/javascript">
+	function selectPage(page){
+		$("#customer").load("updateCustomerPage", {page:page})
+	}
 	$(function(){
 		$('.user').on('click',function(){
-			$('.layui-body').load('./pages/linkman.html');  
+			$('.layui-body').load('./pages/linkman.html');
 		})
 		$('.editRecord').on('click',function(){
-			$('.layui-body').load('./pages/activities.html');  
+			$('.layui-body').load('./pages/activities.html');
 		})
 
 		// 点击新增显示模态框
@@ -275,12 +260,12 @@
 		// 新增模态框关闭
 		$('button:contains(取消)').on('click',function(){
 			$('button[type=reset]').trigger('click');
-				$('#toAdd').hide();
+			$('#toAdd').hide();
 		})
 		// 新增模态框保存
 		$('button:contains(保存)').on('click',function(){
-				$('#toAdd').hide();
-		})	
+			$('#toAdd').hide();
+		})
 		// 显示编辑模态框
 		$('.first').click(function(){
 			$('#toAdd').show();
@@ -303,13 +288,14 @@
 		})
 		// 查询
 		$('.search').click(function(){
-			$.post('http://127.0.0.1:8888/authentication/form',{"username":"lucy","password":"333"},function(res){
-					alert('成功')
-					// table();
-				})
-
-			// alert('查询')
+			var customerName = $("#customerName").val();
+			var region = $("#searchRegion option:selected").val();
+			var level = $("#searchLevel option:selected").val();
+			$("#customer").load("findAllCustomer",
+					{name:customerName,region:region,level:level}
+			)
 		})
 
 	})
 </script>
+</html>

@@ -2,13 +2,13 @@ $(function(){
   $('.layui-nav-child').on({
     click:function(){
       if($(this).text().trim()=="商机开发计划"){
-        $('.layui-body').load('/plan');
+        $('.layui-body').load('toPlan');
       }
        if($(this).text().trim()=="销售商机管理"){
         $('.layui-body').load('toSale');
       }
        if($(this).text().trim()=="客户信息查询"){
-        $('.layui-body').load('pages/customer.html');
+        $('.layui-body').load('toCustomer');
       }
       if($(this).text()=="客户信息添加"){
         $('.layui-body').load('./pages/customer_add.html');

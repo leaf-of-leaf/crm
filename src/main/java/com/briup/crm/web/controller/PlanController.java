@@ -5,11 +5,15 @@ import com.briup.crm.bean.Plan;
 import com.briup.crm.bean.User;
 import com.briup.crm.service.IPlanService;
 import com.briup.crm.service.ISaleService;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -27,7 +31,7 @@ public class PlanController {
     @Autowired
     private IPlanService planService;
 
-    @GetMapping("/plan")
+    @GetMapping("/toPlan")
     public String toPlan(){
         return "redirect:findAllChanceByUser";
     }
@@ -40,18 +44,28 @@ public class PlanController {
     }
 
     @RequestMapping("submitPlan")
-    public String submitPlan(String plan, HttpSession session){
+    public String submitPlan(String todo, HttpSession session, Integer planId, String result){
         Chance chance = (Chance) session.getAttribute("chance");
-        planService.savePlan(new Plan(chance, plan));
+        Plan plan = planId == null? new Plan(chance,todo, StringUtils.isEmpty(result)?"进行中":result):
+                new Plan(planId, chance,todo, StringUtils.isEmpty(result)?"进行中":result);
+        planService.savePlan(plan);
         chance.setStatus("处理中");
         saleService.saveChance(chance);
         return "redirect:findAllChanceByUser";
     }
 
-    @GetMapping("/planEdit")
-    public String toPlanEdit(HttpSession session, Integer chanceId){
-        User user = (User) session.getAttribute("user");
-        List<Plan> plans = planService.findPlansByUserIdAndChanceId(user.getId(), chanceId);
+    @RequestMapping("editPlan")
+    @ResponseBody
+    public String editPlan(String todo, HttpSession session, Integer planId, String result){
+        String msg = planId == null?"新增成功":"修改成功";
+        Chance chance = (Chance) session.getAttribute("chance");
+        planService.savePlan(new Plan(planId, chance, todo, StringUtils.isEmpty(result)?"进行中":result));
+        return msg;
+    }
+
+    @RequestMapping("/planEdit/{chanceId}")
+    public String toPlanEdit(HttpSession session, @PathVariable("chanceId") Integer chanceId){
+        List<Plan> plans = planService.findPlansByChanceId(chanceId);
         session.setAttribute("plans", plans);
 
         Chance chance = saleService.findChanceById(chanceId);
@@ -59,8 +73,13 @@ public class PlanController {
         return "pages/plan_edit";
     }
 
-    @GetMapping("/planDetail")
-    public String toPlanDetail(){
+    @RequestMapping("/planDetail")
+    public String toPlanDetail(Integer chanceId, HttpSession session){
+        Chance chance = saleService.findChanceById(chanceId);
+        session.setAttribute("chance", chance);
+        User user = (User) session.getAttribute("user");
+        List<Plan> plans = planService.findPlansByUserIdAndChanceId(user.getId(), chanceId);
+        session.setAttribute("plans", plans);
         return "pages/plan_detail";
     }
 
@@ -80,5 +99,27 @@ public class PlanController {
         Page<Chance> chances = saleService.findAllChanceByUser(page - 1, user.getId(), address);
         session.setAttribute("chances", chances);
         return "pages/plan";
+    }
+
+    @RequestMapping("/findPlan")
+    @ResponseBody
+    public Plan findPlan(Integer planId){
+        return planService.findPlanById(planId);
+    }
+
+    @ResponseBody
+    @RequestMapping("deletePlan/{id}")
+    public String deletePlan(@PathVariable("id") Integer planId){
+        planService.deletePlanById(planId);
+        return "删除成功";
+    }
+
+    @ResponseBody
+    @RequestMapping("submitPlans")
+    public String submitPlans(Integer chanceId){
+        Chance chance = saleService.findChanceById(chanceId);
+        chance.setStatus("处理完成");
+        saleService.saveChance(chance);
+        return "提交成功";
     }
 }

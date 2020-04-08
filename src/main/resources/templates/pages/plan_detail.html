@@ -1,88 +1,84 @@
+<html xmlns:th="http://www.thymeleaf.org">
 <div id="plan_detail">
-  <div class="foot">
- 	<form>
+	<div class="foot">
+		<form>
 			<div class="form-group">
 				<label>商机详情:</label>
 			</div>
 		</form>
-</div>
+	</div>
 
-<div style="margin-bottom: 50px;margin-top: -30px;">
-	<table class="table table-hover">
-		 <thead>
-		    <tr style="background:#E8E8E8;">
-		       <th>商机来源</th>
+	<div style="margin-bottom: 50px;margin-top: -30px;">
+		<table class="table table-hover">
+			<thead>
+			<tr style="background:#E8E8E8;">
+				<th>商机来源</th>
 
-		      <th>成功几率</th>
-		      
+				<th>成功几率</th>
 
-		      <th>商机指派</th>		 
-			  <th>所属地区</th>
 
-			  <th>创建人</th>
+				<th>商机指派</th>
+				<th>所属地区</th>
 
-			  <th>商机描述</th>
-		    </tr> 
-		  </thead>
+				<th>创建人</th>
 
-		  <tbody>
-		    <tr>
-		     <td>商机来源</td>
-		      <td>0.6</td>
-		      <td>去哪</td>
-		      <td>华中</td>
-		      <td>李四</td>
-		      <td>描述,描述,描述</td>
-		    </tr> 
-         </tbody>
-    </table>
-</div>
- <div class="foot">
- 	<form>
+				<th>商机描述</th>
+			</tr>
+			</thead>
+
+			<tbody>
+			<tr>
+				<td th:text="${session.chance.source}">商机来源</td>
+				<td th:text="${session.chance.rate}">0.6</td>
+				<td th:text="${session.chance.handler.name}">去哪</td>
+				<td th:text="${session.chance.address}">华中</td>
+				<td th:text="${session.chance.creator.name}">李四</td>
+				<td th:text="${session.chance.description}">描述,描述,描述</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="foot">
+		<form>
 			<div class="form-group">
 				<label>开发计划:</label>
 			</div>
 		</form>
-</div>
-<div class="kaifa" style="margin-bottom: 50px;margin-top: -30px;height:200px;overflow:auto;">
-	<table class="table table-hover">
-		 <thead>
-		    <tr style="background:#E8E8E8;">
-		      <th>序号</th>
-		      <th>计划内容</th>
-		       <th>计划结果</th>
-		       
-		    </tr> 
-		  </thead>
-		  <tbody>
-		    <tr>
-		     <td>1</td>
-		      <td>内容,这是内容,很长</td>
-		      <td>已处理完</td>
-		     
-		    </tr> 
-		    <tr>
-		     <td>1</td>
-		      <td>内容,这是内容,很长</td>
-		      <td>已处理完</td>
-		     
-		    </tr> 
-         </tbody>
-    </table>
-</div>
+	</div>
+	<div class="kaifa" style="margin-bottom: 50px;margin-top: -30px;height:200px;overflow:auto;">
+		<table class="table table-hover">
+			<thead>
+			<tr style="background:#E8E8E8;">
+				<th>序号</th>
+				<th>计划内容</th>
+				<th>计划结果</th>
+
+			</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="plan:${session.plans}">
+					<tr>
+						<td th:text="${plan.id}">1</td>
+						<td th:text="${plan.todo}">内容,这是内容,很长</td>
+						<td th:text="${plan.result}">已处理完</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
 	<div class="foot">
 		<form>
 			<div class="form-group">
-			<input class="btn btn-default back" type="button" value="返回" id="add">
+				<input class="btn btn-default back" type="button" value="返回" id="add">
 			</div>
 		</form>
 	</div>
 </div>
 <style>
-#plan_detail{
-	width: 1140px;
-	overflow: hidden;
-}
+	#plan_detail{
+		width: 1140px;
+		overflow: hidden;
+	}
 	.kaifa tr td:first-child,th:first-child{
 		width: 100px;
 	}
@@ -119,9 +115,10 @@
 	}
 </style>
 <script type="text/javascript">
-	$(function(){		
+	$(function(){
 		$('.back').on('click',function(){
-		 $('.layui-body').load('./pages/plan.html');  
+			$('#plan_detail').load('/toPlan');
 		})
 	})
 </script>
+</html>

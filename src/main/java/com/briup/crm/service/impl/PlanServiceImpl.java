@@ -31,7 +31,16 @@ public class PlanServiceImpl implements IPlanService {
 
     @Override
     public void savePlan(Plan plan) {
-
         planDao.save(plan);
+    }
+
+    @Override
+    public List<Plan> findPlansByChanceId(Integer chanceId) {
+        return planDao.findPlansByChanceId(chanceId);
+    }
+
+    @Override
+    public Plan findPlanById(Integer planId) {
+        return planDao.getOne(planId);
     }
 }

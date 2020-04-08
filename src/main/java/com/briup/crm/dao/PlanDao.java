@@ -18,4 +18,6 @@ public interface PlanDao extends JpaRepository<Plan, Integer> {
             "on p.chance_id = c.id and c.handler_id = ?1 " +
             "where chance_id = ?2", nativeQuery = true)
     List<Plan> findPlansByUserIdAndChanceId(Integer userId, Integer chanceId);
+
+    List<Plan> findPlansByChanceId(Integer chanceId);
 }
